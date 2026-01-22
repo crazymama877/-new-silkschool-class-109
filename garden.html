@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404班早读花园</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', '微软雅黑', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 8px solid #ffcc5c;
+        }
+        
+        /* 标题栏样式 */
+        .header {
+            background: linear-gradient(to right, #6ecbf5, #059dc5);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            border-bottom: 5px solid #ffcc5c;
+        }
+        
+        .title-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .title {
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .edit-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .edit-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        /* 控制面板 */
+        .control-panel {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .control-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .start-btn {
+            background: linear-gradient(to right, #43e97b, #38f9d7);
+            color: #056a3f;
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .stop-btn {
+            background: linear-gradient(to right, #ff6b6b, #ff8e8e);
+            color: white;
+        }
+        
+        .stop-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .report-btn {
+            background: linear-gradient(to right, #a18cd1, #fbc2eb);
+            color: white;
+        }
+        
+        .report-btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        /* 主内容区域 */
+        .main-content {
+            display: flex;
+            min-height: 600px;
+        }
+        
+        /* 花园区域 */
+        .garden-area {
+            flex: 3;
+            padding: 30px;
+            background: linear-gradient(to bottom, #c5f9d7, #f5f5d6);
+            position: relative;
+            overflow: hidden;
+            min-height: 600px;
+        }
+        
+        .garden-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23c5f9d7"/><circle cx="20" cy="20" r="5" fill="%2387e487" opacity="0.3"/><circle cx="80" cy="40" r="8" fill="%2387e487" opacity="0.3"/><circle cx="50" cy="80" r="6" fill="%2387e487" opacity="0.3"/><circle cx="70" cy="15" r="4" fill="%2387e487" opacity="0.3"/></svg>');
+            z-index: 1;
+        }
+        
+        .garden-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+        }
+        
+        .flower-container {
+            position: absolute;
+            transition: transform 0.5s;
+        }
+        
+        .flower {
+            position: relative;
+            width: 100px;
+            height: 120px;
+        }
+        
+        .stem {
+            position: absolute;
+            width: 6px;
+            height: 80px;
+            background: linear-gradient(to bottom, #4CAF50, #2E7D32);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 3px;
+        }
+        
+        .leaf {
+            position: absolute;
+            width: 20px;
+            height: 12px;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            transform: rotate(45deg);
+        }
+        
+        .leaf.left {
+            left: 15px;
+            top: 40px;
+        }
+        
+        .leaf.right {
+            right: 15px;
+            top: 30px;
+            transform: rotate(-45deg);
+        }
+        
+        .seed {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: #8B4513;
+            border-radius: 50%;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .sprout {
+            position: absolute;
+            width: 8px;
+            height: 20px;
+            background: linear-gradient(to bottom, #8BC34A, #4CAF50);
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 4px;
+        }
+        
+        .seedling {
+            position: absolute;
+            width: 8px;
+            height: 40px;
+            background: linear-gradient(to bottom, #8BC34A, #4CAF50);
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 4px;
+        }
+        
+        .seedling::before, .seedling::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 12px;
+            background-color: #8BC34A;
+            border-radius: 50%;
+            top: 15px;
+        }
+        
+        .seedling::before {
+            left: -10px;
+            transform: rotate(-30deg);
+        }
+        
+        .seedling::after {
+            right: -10px;
+            transform: rotate(30deg);
+        }
+        
+        .bud {
+            position: absolute;
+            width: 20px;
+            height: 25px;
+            background: linear-gradient(to bottom, #FF4081, #F50057);
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 50% 50% 40% 40%;
+        }
+        
+        .petal {
+            position: absolute;
+            width: 25px;
+            height: 35px;
+            background: linear-gradient(to bottom, #FF4081, #F50057);
+            border-radius: 50%;
+        }
+        
+        .petal.center {
+            width: 30px;
+            height: 30px;
+            background: #FFEB3B;
+            z-index: 3;
+        }
+        
+        .natural-disaster {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+        
+        .rain {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 95%, rgba(173, 216, 230, 0.7) 100%);
+            background-size: 100% 10px;
+            animation: rainFall 0.8s linear infinite;
+        }
+        
+        .wind {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, transparent 95%, rgba(255, 255, 255, 0.5) 100%);
+            background-size: 20px 100%;
+            animation: windBlow 1.5s linear infinite;
+        }
+        
+        @keyframes rainFall {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 10px; }
+        }
+        
+        @keyframes windBlow {
+            0% { background-position: 0 0; }
+            100% { background-position: 20px 0; }
+        }
+        
+        /* 侧边信息面板 */
+        .info-panel {
+            flex: 1;
+            padding: 25px;
+            background: linear-gradient(to bottom, #f9f7ff, #e6f3ff);
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .info-box {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-left: 6px solid #6ecbf5;
+        }
+        
+        .info-title {
+            font-size: 1.3rem;
+            color: #059dc5;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .decibel-display {
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 10px 0;
+            color: #056a3f;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .decibel-status {
+            text-align: center;
+            font-size: 1.2rem;
+            padding: 8px;
+            border-radius: 50px;
+            margin-top: 10px;
+        }
+        
+        .good {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: #2E7D32;
+        }
+        
+        .bad {
+            background-color: rgba(244, 67, 54, 0.2);
+            color: #D32F2F;
+        }
+        
+        .progress-container {
+            margin-top: 15px;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #43e97b, #38f9d7);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .timer {
+            font-size: 1.8rem;
+            text-align: center;
+            font-weight: bold;
+            color: #059dc5;
+            margin: 10px 0;
+        }
+        
+        .flower-stats {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+        
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #F50057;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .history-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .history-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .history-date {
+            font-weight: bold;
+        }
+        
+        .history-flowers {
+            color: #F50057;
+            font-weight: bold;
+        }
+        
+        /* 报告弹窗 */
+        .report-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            display: none;
+        }
+        
+        .report-content {
+            background-color: white;
+            width: 90%;
+            max-width: 700px;
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: #666;
+            cursor: pointer;
+        }
+        
+        .report-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .report-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .report-stat {
+            background: linear-gradient(to right, #f9f7ff, #e6f3ff);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .report-stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #059dc5;
+            margin: 10px 0;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 900px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .control-panel {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 标题栏 -->
+        <div class="header">
+            <div class="title-area">
+                <h1 class="title" id="class-title">404班早读花园</h1>
+                <button class="edit-btn" id="edit-title-btn">
+                    <i class="fas fa-edit"></i>
+                </button>
+            </div>
+            <div class="control-panel">
+                <button class="control-btn start-btn" id="start-btn">
+                    <i class="fas fa-play"></i> 开始早读
+                </button>
+                <button class="control-btn stop-btn" id="stop-btn" disabled>
+                    <i class="fas fa-stop"></i> 结束早读
+                </button>
+                <button class="control-btn report-btn" id="report-btn">
+                    <i class="fas fa-chart-bar"></i> 成长报告
+                </button>
+            </div>
+        </div>
+        
+        <!-- 主内容区域 -->
+        <div class="main-content">
+            <!-- 花园区域 -->
+            <div class="garden-area">
+                <div class="garden-bg"></div>
+                <div class="garden-content" id="garden-content">
+                    <!-- 花朵将通过JS动态添加 -->
+                </div>
+                <div class="natural-disaster" id="natural-disaster"></div>
+            </div>
+            
+            <!-- 信息面板 -->
+            <div class="info-panel">
+                <!-- 分贝检测 -->
+                <div class="info-box">
+                    <h2 class="info-title">
+                        <i class="fas fa-volume-up"></i> 早读音量
+                    </h2>
+                    <div class="decibel-display" id="decibel-display">--</div>
+                    <div class="decibel-status" id="decibel-status">等待检测...</div>
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>成长进度</span>
+                            <span id="progress-percent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 计时器 -->
+                <div class="info-box">
+                    <h2 class="info-title">
+                        <i class="fas fa-clock"></i> 早读计时
+                    </h2>
+                    <div class="timer" id="timer">00:00</div>
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>早读进度</span>
+                            <span id="reading-progress">0/15分钟</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="reading-progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 花园统计 -->
+                <div class="info-box">
+                    <h2 class="info-title">
+                        <i class="fas fa-seedling"></i> 花园统计
+                    </h2>
+                    <div class="flower-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="total-flowers">0</div>
+                            <div class="stat-label">玫瑰花</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="seeds">0</div>
+                            <div class="stat-label">种子</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="max-duration">0</div>
+                            <div class="stat-label">最长达标(秒)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 历史记录 -->
+                <div class="info-box">
+                    <h2 class="info-title">
+                        <i class="fas fa-history"></i> 今日记录
+                    </h2>
+                    <div class="history-list" id="history-list">
+                        <!-- 历史记录将通过JS动态添加 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 报告弹窗 -->
+    <div class="report-modal" id="report-modal">
+        <div class="report-content">
+            <button class="close-btn" id="close-report-btn">&times;</button>
+            <div class="report-header">
+                <h2><span id="report-class-title">404班</span>早读成长报告</h2>
+                <p id="report-date">2023年10月20日</p>
+            </div>
+            <div class="report-stats">
+                <div class="report-stat">
+                    <h3>玫瑰花数量</h3>
+                    <div class="report-stat-value" id="report-total-flowers">0</div>
+                    <p>全班共同努力的成果</p>
+                </div>
+                <div class="report-stat">
+                    <h3>早读总时长</h3>
+                    <div class="report-stat-value" id="report-total-time">0</div>
+                    <p>分钟</p>
+                </div>
+                <div class="report-stat">
+                    <h3>最长达标时长</h3>
+                    <div class="report-stat-value" id="report-max-duration">0</div>
+                    <p>秒</p>
+                </div>
+                <div class="report-stat">
+                    <h3>音量达标率</h3>
+                    <div class="report-stat-value" id="report-compliance-rate">0%</div>
+                    <p>保持良好早读状态</p>
+                </div>
+            </div>
+            <div class="info-box">
+                <h2 class="info-title">
+                    <i class="fasfa-award"></i> 今日评价
+                </h2>
+                <p id="report-evaluation">等待生成评价...</p>
+            </div>
+            <div class="info-box">
+                <h2 class="info-title">
+                    <i class="fas fa-bullseye"></i> 明日目标
+                </h2>
+                <p id="report-next-goal">等待生成目标...</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 应用状态管理
+        const state = {
+            isReading: false,
+            decibelLevel: 0,
+            decibelHistory: [],
+            flowers: [],
+            seeds: [],
+            currentGrowthStage: 0,
+            growthTimer: 0,
+            totalReadingTime: 0,
+            goodReadingTime: 0,
+            maxContinuousGoodTime: 0,
+            currentContinuousGoodTime: 0,
+            startTime: null,
+            timerInterval: null,
+            decibelInterval: null,
+            currentFlowerId: 0,
+            disasterActive: false,
+            growthStages: [
+                { name: "种子", duration: 10, element: "seed" },
+                { name: "发芽", duration: 20, element: "sprout" },
+                { name: "小苗", duration: 30, element: "seedling" },
+                { name: "花苞", duration: 20, element: "bud" },
+                { name: "开花", duration: 30, element: "flower" }
+            ],
+            historyRecords: []
+        };
+
+        // DOM 元素
+        const elements = {
+            classTitle: document.getElementById('class-title'),
+            editTitleBtn: document.getElementById('edit-title-btn'),
+            startBtn: document.getElementById('start-btn'),
+            stopBtn: document.getElementById('stop-btn'),
+            reportBtn: document.getElementById('report-btn'),
+            decibelDisplay: document.getElementById('decibel-display'),
+            decibelStatus: document.getElementById('decibel-status'),
+            progressFill: document.getElementById('progress-fill'),
+            progressPercent: document.getElementById('progress-percent'),
+            timer: document.getElementById('timer'),
+            readingProgress: document.getElementById('reading-progress'),
+            readingProgressFill: document.getElementById('reading-progress-fill'),
+            totalFlowers: document.getElementById('total-flowers'),
+            seedsCount: document.getElementById('seeds'),
+            maxDuration: document.getElementById('max-duration'),
+            gardenContent: document.getElementById('garden-content'),
+            naturalDisaster: document.getElementById('natural-disaster'),
+            historyList: document.getElementById('history-list'),
+            reportModal: document.getElementById('report-modal'),
+            closeReportBtn: document.getElementById('close-report-btn'),
+            reportClassTitle: document.getElementById('report-class-title'),
+            reportDate: document.getElementById('report-date'),
+            reportTotalFlowers: document.getElementById('report-total-flowers'),
+            reportTotalTime: document.getElementById('report-total-time'),
+            reportMaxDuration: document.getElementById('report-max-duration'),
+            reportComplianceRate: document.getElementById('report-compliance-rate'),
+            reportEvaluation: document.getElementById('report-evaluation'),
+            reportNextGoal: document.getElementById('report-next-goal')
+        };
+
+        // 初始化函数
+        function init() {
+            // 加载历史记录
+            loadHistory();
+            
+            // 设置事件监听器
+            setupEventListeners();
+            
+            // 初始化花园
+            initGarden();
+            
+            // 模拟初始历史记录
+            simulateInitialHistory();
+            
+            // 更新UI
+            updateUI();
+        }
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 编辑班级名称
+            elements.editTitleBtn.addEventListener('click', () => {
+                const newTitle = prompt('请输入新的班级名称：', elements.classTitle.textContent);
+                if (newTitle && newTitle.trim() !== '') {
+                    elements.classTitle.textContent = newTitle.trim();
+                    saveToLocalStorage('classTitle', newTitle.trim());
+                }
+            });
+
+            // 开始早读
+            elements.startBtn.addEventListener('click', startReading);
+
+            // 结束早读
+            elements.stopBtn.addEventListener('click', stopReading);
+
+            // 查看报告
+            elements.reportBtn.addEventListener('click', showReport);
+
+            // 关闭报告
+            elements.closeReportBtn.addEventListener('click', () => {
+                elements.reportModal.style.display = 'none';
+            });
+
+            // 点击报告弹窗外区域关闭
+            elements.reportModal.addEventListener('click', (e) => {
+                if (e.target === elements.reportModal) {
+                    elements.reportModal.style.display = 'none';
+                }
+            });
+        }
+
+        // 初始化花园
+        function initGarden() {
+            // 清空花园
+            elements.gardenContent.innerHTML = '';
+            
+            // 如果有保存的花朵，加载它们
+            const savedFlowers = getFromLocalStorage('flowers');
+            if (savedFlowers && savedFlowers.length > 0) {
+                state.flowers = savedFlowers;
+                state.flowers.forEach(flower => {
+                    createFlowerElement(flower);
+                });
+            }
+        }
+
+        // 加载历史记录
+        function loadHistory() {
+            const savedHistory = getFromLocalStorage('historyRecords');
+            if (savedHistory) {
+                state.historyRecords = savedHistory;
+            }
+        }
+
+        // 模拟初始历史记录
+        function simulateInitialHistory() {
+            if (state.historyRecords.length === 0) {
+                const today = new Date();
+                const yesterday = new Date(today);
+                yesterday.setDate(yesterday.getDate() - 1);
+                const twoDaysAgo = new Date(today);
+                twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+                
+                state.historyRecords = [
+                    { date: formatDate(yesterday), flowers: 8, maxDuration: 45 },
+                    { date: formatDate(twoDaysAgo), flowers: 6, maxDuration: 38 }
+                ];
+                
+                saveToLocalStorage('historyRecords', state.historyRecords);
+            }
+            
+            updateHistoryList();
+        }
+
+        // 开始早读
+        function startReading() {
+            if (state.isReading) return;
+            
+            state.isReading = true;
+            state.startTime = new Date();
+            state.decibelHistory = [];
+            state.currentContinuousGoodTime = 0;
+            
+            // 更新按钮状态
+            elements.startBtn.disabled = true;
+            elements.stopBtn.disabled = false;
+            
+            // 开始计时器
+            startTimer();
+            
+            // 开始分贝检测
+            startDecibelDetection();
+            
+            // 添加历史记录
+            addHistoryRecord('开始早读', 'info');
+            
+            // 更新UI
+            updateUI();
+        }
+
+        // 结束早读
+        function stopReading() {
+            if (!state.isReading) return;
+            
+            state.isReading = false;
+            
+            // 更新按钮状态
+            elements.startBtn.disabled = false;
+            elements.stopBtn.disabled = true;
+            
+            // 停止计时器和分贝检测
+            clearInterval(state.timerInterval);
+            clearInterval(state.decibelInterval);
+            
+            // 添加历史记录
+            addHistoryRecord('结束早读', 'info');
+            
+            // 自动生成报告
+            setTimeout(showReport, 500);
+            
+            // 保存花朵状态
+            saveToLocalStorage('flowers', state.flowers);
+            
+            // 更新UI
+            updateUI();
+        }
+
+        // 开始计时器
+        function startTimer() {
+            state.timerInterval = setInterval(() => {
+                state.totalReadingTime++;
+                
+                // 更新计时器显示
+                const minutes = Math.floor(state.totalReadingTime / 60);
+                const seconds = state.totalReadingTime % 60;
+                elements.timer.textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // 更新早读进度条（假设早读时长为15分钟）
+                const readingDuration = 15 * 60; // 15分钟，单位秒
+                const progressPercent = Math.min(100, (state.totalReadingTime / readingDuration) * 100);
+                elements.readingProgressFill.style.width = `${progressPercent}%`;
+                elements.readingProgress.textContent = 
+                    `${Math.floor(state.totalReadingTime/60)}/${15}分钟`;
+                
+                // 每过一分钟添加一条历史记录
+                if (state.totalReadingTime % 60 === 0 && state.totalReadingTime > 0) {
+                    addHistoryRecord(`已持续早读 ${state.totalReadingTime/60} 分钟`, 'time');
+                }
+                
+            }, 1000);
+        }
+
+        // 开始分贝检测
+        function startDecibelDetection() {
+            state.decibelInterval = setInterval(() => {
+                // 模拟分贝检测：随机生成35-70分贝的值
+                // 在实际应用中，这里应该连接真实的麦克风API
+                const simulatedDecibel = Math.floor(Math.random() * 35) + 35;
+                
+                // 记录分贝值
+                state.decibelLevel = simulatedDecibel;
+                state.decibelHistory.push({
+                    time: new Date(),
+                    value: simulatedDecibel
+                });
+                
+                // 保持最近100条记录
+                if (state.decibelHistory.length > 100) {
+                    state.decibelHistory.shift();
+                }
+                
+                // 更新分贝显示
+                elements.decibelDisplay.textContent = simulatedDecibel;
+                
+                // 检测分贝是否达标（≥40）
+                if (simulatedDecibel >= 40) {
+                    // 达标：促进生长
+                    handleGoodDecibel();
+                    elements.decibelStatus.textContent = "音量达标，花园在生长！";
+                    elements.decibelStatus.className = "decibel-status good";
+                    
+                    // 记录连续达标时间
+                    state.currentContinuousGoodTime++;
+                    state.goodReadingTime++;
+                    
+                    // 更新最长连续达标时间
+                    if (state.currentContinuousGoodTime > state.maxContinuousGoodTime) {
+                        state.maxContinuousGoodTime = state.currentContinuousGoodTime;
+                    }
+                    
+                    // 移除自然灾害效果
+                    if (state.disasterActive) {
+                        elements.naturalDisaster.style.opacity = '0';
+                        state.disasterActive = false;
+                    }
+                } else {
+                    // 不达标：触发自然灾害
+                    handleBadDecibel();
+                    elements.decibelStatus.textContent = "音量不足，花园正在枯萎！";
+                    elements.decibelStatus.className = "decibel-status bad";
+                    
+                    // 重置连续达标时间
+                    state.currentContinuousGoodTime = 0;
+                    
+                    // 显示自然灾害效果
+                    if (!state.disasterActive) {
+                        showNaturalDisaster();
+                        state.disasterActive = true;
+                    }
+                }
+                
+                // 更新UI
+                updateUI();
+                
+            }, 1000); // 每秒检测一次
+        }
+
+        // 处理达标分贝
+        function handleGoodDecibel() {
+            // 如果当前没有花朵在生长，创建新的种子
+            if (state.seeds.length === 0) {
+                createNewSeed();
+            }
+            
+            // 为每个种子增加生长时间
+            state.seeds.forEach(seed => {
+                seed.growthTime++;
+                
+                // 检查是否需要进入下一阶段
+                const currentStage = state.growthStages[seed.stage];
+                if (seed.growthTime >= currentStage.duration) {
+                    // 进入下一阶段
+                    seed.stage++;
+                    seed.growthTime = 0;
+                    
+                    // 如果已经开花，将种子转化为花朵
+                    if (seed.stage >= state.growthStages.length) {
+                        completeFlower(seed);
+                    } else {
+                        // 更新花朵显示
+                        updateFlowerElement(seed);
+                    }
+                } else {
+                    // 更新生长进度
+                    updateFlowerProgress(seed);
+                }
+            });
+        }
+
+        // 处理不达标分贝
+        function handleBadDecibel() {
+            // 如果没有种子，直接返回
+            if (state.seeds.length === 0) return;
+            
+            // 为每个种子减少生长时间（倒退生长）
+            state.seeds.forEach((seed, index) => {
+                seed.growthTime = Math.max(0, seed.growthTime - 2);
+                
+                // 如果生长时间归零且不是第一阶段，则退回上一阶段
+                if (seed.growthTime <= 0 && seed.stage > 0) {
+                    seed.stage--;
+                    seed.growthTime = state.growthStages[seed.stage].duration - 1;
+                    
+                    // 更新花朵显示
+                    updateFlowerElement(seed);
+                } else if (seed.growthTime <= 0 && seed.stage === 0) {
+                    // 如果种子阶段也归零，移除种子
+                    removeSeed(index);
+                } else {
+                    // 更新生长进度
+                    updateFlowerProgress(seed);
+                }
+            });
+        }
+
+        // 创建新种子
+        function createNewSeed() {
+            const seedId = `seed-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+            const newSeed = {
+                id: seedId,
+                stage: 0, // 种子阶段
+                growthTime: 0,
+                x: Math.random() * 80 + 10, // 水平位置（百分比）
+                y: Math.random() * 60 + 20  // 垂直位置（百分比）
+            };
+            
+            state.seeds.push(newSeed);
+            createFlowerElement(newSeed);
+            
+            // 添加历史记录
+            addHistoryRecord('新生了一颗种子！', 'seed');
+            
+            return newSeed;
+        }
+
+        // 完成花朵生长
+        function completeFlower(seed) {
+            // 从种子列表中移除
+            const seedIndex = state.seeds.findIndex(s => s.id === seed.id);
+            if (seedIndex !== -1) {
+                state.seeds.splice(seedIndex, 1);
+            }
+            
+            // 添加到花朵列表
+            const flower = {
+                id: seed.id,
+                x: seed.x,
+                y: seed.y,
+                createdAt: new Date()
+            };
+            
+            state.flowers.push(flower);
+            
+            // 更新花朵显示为完全绽放状态
+            updateFlowerElement(flower, true);
+            
+            // 添加历史记录
+            addHistoryRecord('一朵玫瑰花完全绽放了！', 'flower');
+            
+            // 创建新的种子，继续生长
+            setTimeout(() => {
+                createNewSeed();
+            }, 1000);
+        }
+
+        // 创建花朵元素
+        function createFlowerElement(flowerData, isComplete = false) {
+            const flowerContainer = document.createElement('div');
+            flowerContainer.className = 'flower-container';
+            flowerContainer.id = flowerData.id;
+            flowerContainer.style.left = `${flowerData.x}%`;
+            flowerContainer.style.top = `${flowerData.y}%`;
+            
+            const flowerDiv = document.createElement('div');
+            flowerDiv.className = 'flower';
+            
+            // 根据生长阶段添加相应元素
+            if (isComplete) {
+                // 完全绽放的玫瑰花
+                flowerDiv.innerHTML = `
+                    <div class="stem"></div>
+                    <div class="leaf left"></div>
+                    <div class="leaf right"></div>
+                    <div class="petal" style="top: 20px; left: 35px; transform: rotate(0deg);"></div>
+                    <div class="petal" style="top: 15px; left: 50px; transform: rotate(45deg);"></div>
+                    <div class="petal" style="top: 25px; left: 60px; transform: rotate(90deg);"></div>
+                    <div class="petal" style="top: 40px; left: 60px; transform: rotate(135deg);"></div>
+                    <div class="petal" style="top: 50px; left: 50px; transform: rotate(180deg);"></div>
+                    <div class="petal" style="top: 45px; left: 35px; transform: rotate(225deg);"></div>
+                    <div class="petal" style="top: 35px; left: 25px; transform: rotate(270deg);"></div>
+                    <div class="petal" style="top: 20px; left: 25px; transform: rotate(315deg);"></div>
+                    <div class="petal center" style="top: 35px; left: 42px;"></div>
+                `;
+            } else {
+                // 根据生长阶段显示不同形态
+                const stage = state.growthStages[flowerData.stage];
+                flowerDiv.innerHTML = `
+                    ${flowerData.stage >= 1 ? '<div class="stem"></div>' : ''}
+                    ${flowerData.stage >= 4 ? '<div class="leaf left"></div><div class="leaf right"></div>' : ''}
+                    <div class="${stage.element}"></div>
+                `;
+            }
+            
+            flowerContainer.appendChild(flowerDiv);
+            elements.gardenContent.appendChild(flowerContainer);
+            
+            // 添加生长进度指示器（仅对种子阶段）
+            if (!isComplete) {
+                const progressIndicator = document.createElement('div');
+                progressIndicator.className = 'growth-progress';
+                progressIndicator.style.cssText = `
+                    position: absolute;
+                    bottom: -20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    font-size: 12px;
+                    color: #056a3f;
+                    white-space: nowrap;
+                `;
+                progressIndicator.id = `${flowerData.id}-progress`;
+                flowerContainer.appendChild(progressIndicator);
+                
+                updateFlowerProgress(flowerData);
+            }
+        }
+
+        // 更新花朵元素
+        function updateFlowerElement(flowerData, isComplete = false) {
+            const existingFlower = document.getElementById(flowerData.id);
+            if (existingFlower) {
+                existingFlower.remove();
+            }
+            
+            createFlowerElement(flowerData, isComplete);
+        }
+
+        // 更新花朵生长进度
+        function updateFlowerProgress(flowerData) {
+            const progressElement = document.getElementById(`${flowerData.id}-progress`);
+            if (progressElement) {
+                const currentStage = state.growthStages[flowerData.stage];
+                const progressPercent = Math.min(100, (flowerData.growthTime / currentStage.duration) * 100);
+                progressElement.textContent = `${currentStage.name} ${progressPercent.toFixed(0)}%`;
+            }
+            
+            // 更新总进度条
+            if (state.seeds.length > 0) {
+                const seed = state.seeds[0]; // 显示第一个种子的进度
+                const currentStage = state.growthStages[seed.stage];
+                const totalStages = state.growthStages.length;
+                const stageProgress = seed.growthTime / currentStage.duration;
+                const totalProgress = ((seed.stage + stageProgress) / totalStages) * 100;
+                
+                elements.progressFill.style.width = `${totalProgress}%`;
+                elements.progressPercent.textContent = `${totalProgress.toFixed(0)}%`;
+            }
+        }
+
+        // 移除种子
+        function removeSeed(index) {
+            const seed = state.seeds[index];
+            if (seed) {
+                // 从DOM中移除
+                const seedElement = document.getElementById(seed.id);
+                if (seedElement) {
+                    seedElement.remove();
+                }
+                
+                // 从数组中移除
+                state.seeds.splice(index, 1);
+                
+                // 添加历史记录
+                addHistoryRecord('一颗种子枯萎消失了', 'wither');
+            }
+        }
+
+        // 显示自然灾害效果
+        function showNaturalDisaster() {
+            // 随机选择自然灾害类型
+            const disasterType = Math.random() > 0.5 ? 'rain' : 'wind';
+            
+            elements.naturalDisaster.innerHTML = '';
+            elements.naturalDisaster.style.opacity = '0.7';
+            
+            const disasterElement = document.createElement('div');
+            disasterElement.className = disasterType;
+            elements.naturalDisaster.appendChild(disasterElement);
+            
+            // 30秒后自动淡化效果
+            setTimeout(() => {
+                elements.naturalDisaster.style.opacity = '0';
+            }, 30000);
+        }
+
+        // 添加历史记录
+        function addHistoryRecord(text, type = 'info') {
+            const now = new Date();
+            const timeString = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+            
+            const record = {
+                time: timeString,
+                text: text,
+                type: type
+            };
+            
+            // 添加到历史记录列表
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
+            
+            let icon = '📝';
+            if (type === 'seed') icon = '🌱';
+            if (type === 'flower') icon = '🌹';
+            if (type === 'wither') icon = '🍂';
+            if (type === 'time') icon = '⏱️';
+            
+            historyItem.innerHTML = `
+                <span>${timeString} ${icon}</span>
+                <span>${text}</span>
+            `;
+            
+            elements.historyList.prepend(historyItem);
+            
+            // 保持最多10条记录显示
+            const items = elements.historyList.querySelectorAll('.history-item');
+            if (items.length > 10) {
+                items[items.length - 1].remove();
+            }
+        }
+
+        // 显示成长报告
+        function showReport() {
+            // 更新报告数据
+            const totalMinutes = Math.floor(state.totalReadingTime / 60);
+            const complianceRate = state.totalReadingTime > 0 
+                ? Math.floor((state.goodReadingTime / state.totalReadingTime) * 100) 
+                : 0;
+            
+            elements.reportClassTitle.textContent = elements.classTitle.textContent;
+            elements.reportDate.textContent = formatDate(new Date());
+            elements.reportTotalFlowers.textContent = state.flowers.length;
+            elements.reportTotalTime.textContent = totalMinutes;
+            elements.reportMaxDuration.textContent = state.maxContinuousGoodTime;
+            elements.reportComplianceRate.textContent = `${complianceRate}%`;
+            
+            // 生成评价
+            let evaluation = '';
+            if (state.flowers.length >= 10) {
+                evaluation = '太棒了！今天的花园繁花似锦，同学们早读非常认真！';
+            } else if (state.flowers.length >= 5) {
+                evaluation = '很不错！花园里开出了不少玫瑰花，继续保持！';
+            } else if (state.flowers.length >= 1) {
+                evaluation = '有进步！花园里开出了玫瑰花，明天可以更努力！';
+            } else {
+                evaluation = '加油！明天早点开始，让花园里开满玫瑰花吧！';
+            }
+            elements.reportEvaluation.textContent = evaluation;
+            
+            // 生成明日目标
+            const nextGoal = `明天目标：${state.flowers.length + 3}朵玫瑰花，最长达标${state.maxContinuousGoodTime + 10}秒`;
+            elements.reportNextGoal.textContent = nextGoal;
+            
+            // 显示报告
+            elements.reportModal.style.display = 'flex';
+            
+            // 保存历史记录
+            if (state.totalReadingTime > 60) { // 至少早读了1分钟才保存记录
+                const todayRecord = {
+                    date: formatDate(new Date()),
+                    flowers: state.flowers.length,
+                    maxDuration: state.maxContinuousGoodTime,
+                    totalTime: totalMinutes
+                };
+                
+                // 检查是否已有今天的记录
+                const existingIndex = state.historyRecords.findIndex(record => 
+                    record.date === todayRecord.date);
+                
+                if (existingIndex !== -1) {
+                    state.historyRecords[existingIndex] = todayRecord;
+                } else {
+                    state.historyRecords.unshift(todayRecord);
+                }
+                
+                // 保持最多7条记录
+                if (state.historyRecords.length > 7) {
+                    state.historyRecords.pop();
+                }
+                
+                saveToLocalStorage('historyRecords', state.historyRecords);
+                updateHistoryList();
+            }
+        }
+
+        // 更新历史记录列表
+        function updateHistoryList() {
+            elements.historyList.innerHTML = '';
+            
+            state.historyRecords.forEach(record => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <span class="history-date">${record.date}</span>
+                    <span>🌹 <span class="history-flowers">${record.flowers}朵</span> | 最长: ${record.maxDuration}秒</span>
+                `;
+                elements.historyList.appendChild(historyItem);
+            });
+        }
+
+        // 更新UI
+        function updateUI() {
+            // 更新花朵数量
+            elements.totalFlowers.textContent = state.flowers.length;
+            elements.seedsCount.textContent = state.seeds.length;
+            elements.maxDuration.textContent = state.maxContinuousGoodTime;
+        }
+
+        // 工具函数：格式化日期
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            return `${year}年${month}月${day}日`;
+        }
+
+        // 工具函数：本地存储
+        function saveToLocalStorage(key, value) {
+            try {
+                localStorage.setItem(`morningGarden_${key}`, JSON.stringify(value));
+            } catch (e) {
+                console.error('保存到本地存储失败:', e);
+            }
+        }
+
+        function getFromLocalStorage(key) {
+            try {
+                const item = localStorage.getItem(`morningGarden_${key}`);
+                return item ? JSON.parse(item) : null;
+            } catch (e) {
+                console.error('从本地存储读取失败:', e);
+                return null;
+            }
+        }
+
+        // 页面加载完成后初始化应用
+        document.addEventListener('DOMContentLoaded', init);
+        
+        // 加载保存的班级名称
+        const savedTitle = getFromLocalStorage('classTitle');
+        if (savedTitle) {
+            elements.classTitle.textContent = savedTitle;
+        }
+    </script>
+</body>
+</html>

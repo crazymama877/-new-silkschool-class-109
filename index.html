@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>丝路学子109小天使班</title>
+    <style>
+        :root { --primary: #6eb5ff; --bg: #f5f9ff; --success: #76c893; --accent: #ffcc5c; }
+        body { font-family: "Microsoft YaHei", sans-serif; background: var(--bg); margin: 0; padding: 0; overflow-x: hidden; }
+        
+        /* 导航栏 */
+        nav { background: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .title-area h1 { margin: 0; color: var(--primary); font-size: 24px; display: inline-block; }
+        #clock { display: inline-block; margin-left: 15px; color: #888; font-size: 14px; }
+        .nav-links a { text-decoration: none; color: white; background: var(--primary); padding: 8px 18px; border-radius: 20px; margin-left: 10px; font-size: 14px; transition: 0.3s; }
+
+        /* 主容器布局 */
+        .main-content { 
+    max-width: 1300px; 
+    margin: 20px auto; 
+    padding: 0 20px; 
+    /* 核心修改：开启两列网格 */
+    display: grid; 
+    grid-template-columns: 1fr 1fr; /* 1fr 1fr 表示左右各占一半 */
+    gap: 20px; /* 板块之间的间距 */
+}
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: relative; }
+        .full-width { grid-column: span 2; }
+        
+        h2 { color: var(--primary); border-left: 5px solid var(--primary); padding-left: 12px; margin-top: 0; font-size: 18px; margin-bottom: 15px; }
+
+        /* 学习园地样式 */
+        .study-park { background: #fffcf0; border: 1px dashed #ffd8a8; padding: 15px; border-radius: 10px; line-height: 1.8; font-size: 15px; }
+
+        /* 能量加油站专区 */
+        .energy-station { 
+    grid-column: span 2; /* 强制横跨 2 列，占满一整行 */
+}
+        .energy-station { grid-column: span 2; padding: 30px; background: linear-gradient(to bottom, #ffffff, #f0f7ff); }
+        
+        /* 进度条样式 */
+        .progress-container { margin-bottom: 25px; text-align: center; }
+        .progress-label { font-weight: bold; color: #555; margin-bottom: 8px; display: block; font-size: 18px; }
+        .progress-bar-bg { background: #eee; height: 24px; border-radius: 12px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); border: 2px solid #fff; }
+        .progress-bar-fill { 
+            height: 100%; width: 0%; background: linear-gradient(90deg, #b5e48c, #76c893); 
+            transition: width 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold;
+        }
+
+        /* 学生格子更大更方便点击 */
+        .student-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; }
+        .student-item { 
+            padding: 15px 10px; border: 2px solid #f0f0f0; border-radius: 10px; text-align: center; 
+            cursor: pointer; background: white; font-size: 15px; transition: all 0.2s; user-select: none;
+        }
+        .student-item:hover { transform: scale(1.05); border-color: var(--primary); box-shadow: 0 5px 10px rgba(0,0,0,0.05); }
+        .student-item.done { background: var(--success) !important; color: white !important; border-color: #64b37d; font-weight: bold; }
+
+        /* 撒花画布 */
+        #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+    </style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<nav>
+    <div class="title-area">
+        <h1>丝路学子109小天使班</h1>
+        <div id="clock">加载中...</div>
+    </div>
+    <div class="nav-links">
+        <a href="garden.html" target="_blank">🌻 早读花园</a>
+        <a href="forest.html" target="_blank">🌲 安静森林</a>
+    </div>
+</nav>
+
+<div class="main-content">
+    <div class="card">
+        <h2>一、小天使语录</h2>
+        <div style="font-size: 28px; color: #010101; line-height: 1.7;">
+            1. 到校准备作业本，早读后上交。<br>
+            2. 下课准备下节课书本，勤喝水。<br>
+            3. 上课大声说，课间小声说。<br>
+            4. 用心听课，静心用餐，勿闲聊。<br>
+            5. 走路脚步轻，不追不打不挤。<br>
+            6. 主动分担，不计较不争吵。<br>
+            7. 仪容整齐，座位环境整洁。<br>
+            8. 将心比心，不给他人添麻烦。<br>
+            9. 把握时间阅读，分享成长。<br>
+            10. 为自己负责，有余力才助人。
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2>二、今日值日生</h2>
+        <div id="duty-display" style="font-size: 32px;"></div>
+    </div>
+
+    <div class="card">
+        <h2>三、本周记事</h2>
+        <div id="weekly-notes" style="font-size: 30px; color: #030303; line-height: 1.6;"></div>
+    </div>
+
+    <div class="card">
+        <h2>四、今日学习园地</h2>
+        <div id="study-park-content" class="study-park">
+            </div>
+    </div>
+
+    <div class="card energy-station">
+        <h2>🚀 能量加油站</h2>
+        
+        <div class="progress-container">
+            <span class="progress-label">班级能量充能中：<span id="percent-text">0</span>%</span>
+            <div class="progress-bar-bg">
+                <div id="progress-fill" class="progress-bar-fill"></div>
+            </div>
+        </div>
+
+        <div class="student-grid" id="student-container"></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+    // ==========================================
+    // 💡 教师修改区：在这里改内容
+    // ==========================================
+    const CONFIG = {
+        studyPark: "1. 待定\n2. 待定\n3. 待定",
+        weeklyNotes: "1.22：第六单元检测，语文课堂作业本订正\n1.23：第七、八单元检测，语文课堂作业本订正"
+    };
+
+    // --- 初始化内容 ---
+    document.getElementById('study-park-content').innerText = CONFIG.studyPark;
+    document.getElementById('weekly-notes').innerText = CONFIG.weeklyNotes;
+
+    // --- 时钟 ---
+    function updateTime() {
+        const now = new Date();
+        document.getElementById('clock').innerHTML = now.toLocaleString('zh-CN', { hour12: false });
+    }
+    setInterval(updateTime, 1000); updateTime();
+
+    // --- 值日生逻辑 ---
+    const dutyTable = {
+        1: { "扫地": "陈瑾之, 陈烁楚, 喻云慈, 曹译心", "拖地": "曾启航", "倒垃圾": "陈嘉煜", "擦餐桌": "安泽钧, 包博然" },
+        2: { "扫地": "陈语嫣, 胡可一, 金昕橙, 季芷琳", "拖地": "陈思远", "倒垃圾": "黄佑麟", "擦餐桌": "金笠阳, 金笠远" },
+        3: { "扫地": "劳一诺, 李振洋, 吕绎心, 邵怀安", "拖地": "刘锴泽", "倒垃圾": "吕乐安", "擦餐桌": "万沐熹, 万沐言" },
+        4: { "扫地": "王晨希, 王槿恬, 宣楚恬, 吴沐涵", "拖地": "徐逸宸", "倒垃圾": "王明朗", "擦餐桌": "蔡丞煜, 薛丞焱" },
+        5: { "扫地": "张惠月, 张凌赫, 张新悦, 张芷萌", "拖地": "周昱杰", "倒垃圾": "张凌云", "擦餐桌": "张煜宸, 赵煜宁" }
+    };
+    const day = new Date().getDay() || 1;
+    const info = dutyTable[day > 5 ? 1 : day];
+    let dutyHtml = '';
+    for(let k in info) dutyHtml += `<p style="margin:4px 0;"><b>${k}:</b> ${info[k]}</p>`;
+    document.getElementById('duty-display').innerHTML = dutyHtml;
+
+    // --- 名单与能量条逻辑 ---
+    const students = ["安泽钧","包博然","蔡丞煜","曹译心","曾启航","陈嘉煜","陈瑾之","陈烁楚","陈思远","陈语嫣","胡可一","黄佑麟","季芷琳","金笠阳","金笠远","金昕橙","劳一诺","李振洋","刘锴泽","吕乐安","吕绎心","邵怀安","万沐熹","万沐言","王晨希","王槿恬","王明朗","吴沐涵","徐逸宸","宣楚恬","薛丞焱","喻云慈","张惠月","张凌赫","张新悦","张芷萌","周昱杰","张凌云","张煜宸","赵煜宁"];
+    const container = document.getElementById('student-container');
+    const totalCount = students.length;
+    let doneCount = 0;
+
+    function updateProgress() {
+        const percent = Math.round((doneCount / totalCount) * 100);
+        const fill = document.getElementById('progress-fill');
+        fill.style.width = percent + "%";
+        document.getElementById('percent-text').innerText = percent;
+        
+        // 如果达到100%，触发撒花
+        if (percent === 100) {
+            fireConfetti();
+        }
+    }
+
+    function fireConfetti() {
+        var end = Date.now() + (3 * 1000); // 持续3秒
+        var colors = ['#bb0000', '#ffffff', '#6eb5ff', '#76c893'];
+
+        (function frame() {
+            confetti({
+                particleCount: 5,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: colors
+            });
+            confetti({
+                particleCount: 5,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: colors
+            });
+
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        }());
+    }
+
+    students.forEach(name => {
+        const div = document.createElement('div');
+        div.className = 'student-item';
+        div.innerText = name;
+        div.onclick = function() {
+            this.classList.toggle('done');
+            if(this.classList.contains('done')) {
+                doneCount++;
+                this.innerHTML = name + "<br><small>已加油</small>";
+            } else {
+                doneCount--;
+                this.innerText = name;
+            }
+            updateProgress();
+        };
+        container.appendChild(div);
+    });
+</script>
+</body>
+</html>
