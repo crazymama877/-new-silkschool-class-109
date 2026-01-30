@@ -92,20 +92,20 @@
 
         /* --- 各板块内容样式 --- */
         /* 语录 */
-        .quote-item { font-size: 24px; color: #444; line-height: 1.8; margin-bottom: 8px; border-bottom: 1px dashed #eee; padding-bottom: 8px; }
+        .quote-item { font-size: 28px; font-weight: 600;color: #444; line-height: 1.8; margin-bottom: 8px; border-bottom: 1px dashed #eee; padding-bottom: 8px; }
 
         /* 值日与课表 */
         .right-column-group { display: flex; flex-direction: column; gap: 25px; }
         .duty-item { padding: 15px; background: #f9fbff; border-radius: 12px; border: 1px solid #edf2f7; margin-bottom: 10px; }
         .duty-label { color: var(--primary); font-size: 16px; font-weight: bold; display: block; margin-bottom: 5px; }
-        .duty-names { font-size: 22px; color: #333; font-weight: 600; }
+        .duty-names { font-size: 30px; color: #333; font-weight: 600; }
 
-        .time-tag { display: inline-block; padding: 4px 14px; background: var(--accent); color: white; border-radius: 8px; font-size: 15px; margin: 15px 0 12px 0; font-weight: 600; }
+        .time-tag { display: inline-block; padding: 4px 14px; background: var(--accent); color: white; border-radius: 8px; font-size: 18px; margin: 15px 0 12px 0; font-weight: 600; }
         .course-row { display: flex; flex-wrap: wrap; gap: 12px; }
-        .course-bubble { padding: 10px 22px; background: white; border: 2px solid #eef2f7; border-radius: 50px; font-size: 20px; font-weight: 700; color: #444; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .course-bubble { padding: 10px 22px; background: white; border: 2px solid #eef2f7; border-radius: 50px; font-size: 28px; font-weight: 700; color: #444; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
 
         /* 记事本 */
-        #weekly-notes { font-size: 26px; color: #555; background: #fffcf0; padding: 20px; border-radius: 12px; border: 1px solid #f9f2d5; white-space: pre-wrap; }
+        #weekly-notes { font-size: 30px; font-weight: 600;color: #555; background: #fffcf0; padding: 20px; border-radius: 12px; border: 1px solid #f9f2d5; white-space: pre-wrap; }
 
         /* --- 能量站与植物成长 --- */
         .energy-station { background: linear-gradient(180deg, #ffffff 0%, #f7faff 100%); }
@@ -205,7 +205,7 @@
         <h2><i class="fa-solid fa-quote-left"></i> 班级微语录</h2>
         <div id="quote-container">
             <div class="quote-item">1. 到校先准备作业本，早读后上交。</div>
-            <div class="quote-item">2. 下课准备下节课书本，上厕所，勤喝水。</div>
+            <div class="quote-item">2. 下课勤喝水，勤上厕所。</div>
             <div class="quote-item">3. 上课回答大声说，课间休息小声说。</div>
             <div class="quote-item">4. 用心听课，静心用餐，勿闲聊。</div>
             <div class="quote-item">5. 走路脚步轻，不追跑不打闹不推挤。</div>
@@ -300,8 +300,16 @@
 <script>
     // --- 配置区域 ---修改重要记事本
     const CONFIG = {
-        weeklyNotes: " 1.23： \n 第七、八单元独立作业 \n （八已讲评，七带回家练习）！！练习看图说话 \n 1.24-25: \n 1.家校联系单  \n 2.阅读绘本观察图片练习看图说话 \n 3.辨认方向：早晨起来，面向太阳。前面是东，后面是西。左面是北，右面是南。\n 4.预习一年级下册第一课 \n 5.坚持练字+跳绳+阅读"
-    };
+        weeklyNotes:`
+        2.2
+        上新课《小青蛙》，书写《春夏秋冬》笔顺
+        2.3
+        上新课《猜字谜》，书写《姓氏歌》笔顺
+        2.4
+        上午书写《小青蛙》《猜字谜》笔顺，下午游学考，考完正式放寒假
+        2.9
+        上午休业式`
+};       
     document.getElementById('weekly-notes').innerText = CONFIG.weeklyNotes;
 
     // --- 时钟 ---
